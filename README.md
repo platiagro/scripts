@@ -19,6 +19,7 @@ Find a useful script in the table below:
 | Script Name    | What it does                                   | How to run        |
 | -------------- | ---------------------------------------------- | ----------------- |
 | enable_cors.sh | Enable the CORS in all kubernetes deployments. | sh enable_cors.sh |
+| reinstall.sh   | Reinstall the PlatIAgro platform from scratch. | sh reinstall.sh   |
 
 ## Contribution
 

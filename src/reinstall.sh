@@ -10,9 +10,9 @@ if [ "$1" = "soft" ]; then
    VERSION=0.3.0
    sudo docker pull platiagro/dex-auth:$VERSION-SNAPSHOT
    sudo docker pull platiagro/datasets:$VERSION-SNAPSHOT
-   sudo docker pull platiagro/projects:$VERSION-SNAPSHOT
+   sudo docker pull platiagro/projects:DEVELOP
    sudo docker pull platiagro/persistence-agent:$VERSION-SNAPSHOT
-   sudo docker pull platiagro/web-ui:$VERSION-SNAPSHOT
+   sudo docker pull platiagro/web-ui:DEVELOP
    sudo docker pull platiagro/platiagro-notebook-image:$VERSION
    sudo docker pull platiagro/platiagro-experiment-image:$VERSION
    sudo docker pull platiagro/platiagro-deployment-image:$VERSION
