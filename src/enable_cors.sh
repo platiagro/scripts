@@ -10,4 +10,4 @@ elif [ "$should_enable" != "0" -a "$should_enable" != "1" ]; then
     exit 0
 fi
 
-kubectl get deployments -A | awk '{if (NR!=1) {print " -n " $1 " set env deployment/" $2 " ENABLE_CORS=" $should_enable}}' | xargs -L 1 kubectl
+kubectl get deployments -A | awk -v should_enable="$should_enable" '{if (NR!=1) {print " -n " $1 " set env deployment/" $2 " ENABLE_CORS=" should_enable}}' | xargs -L 1 kubectl
