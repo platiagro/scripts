@@ -4,7 +4,7 @@ This repo contains many scripts used by the PlatIAgro team.
 
 ## How to run a script
 
-Navigate to `scripts/src`, choose a script, and run it with the following command:
+Navigate to `scripts/src`, choose a script, and run it with one of the following commands:
 
 ```shell
 # Syntax: sh {SCRIPT_NAME}.sh
@@ -12,81 +12,168 @@ Navigate to `scripts/src`, choose a script, and run it with the following comman
 sh enable_cors.sh
 ```
 
-> **Warning:** Some scripts can create folders or need to be located in a specific folder.
+```shell
+# Syntax: ./{SCRIPT_NAME}.sh
+# Example:
+./enable_cors.sh
+```
+
+> **WARNING:** Some scripts should be placed in a specific folder before executed.
 
 ## Available Scripts
 
 All scripts are documented below.
 
-### enable_cors.sh
+### Enable or Disable CORS Errors
 
-- **Name:** enable_cors.sh
-- **Description:** Enables CORS in all kubernetes deployments.
+- **Script Name:** enable_cors.sh
+- **Description:** Used to enable or disable CORS errors in all kubernetes deployments.
+- **Read user input**: Yes
 
-Examples:
+**Syntax:**
+
+`enable_cors.sh $enable_cors`
+
+**Params:**
+
+| Name         | Type/Options |
+| ------------ | ------------ |
+| $enable_cors | 0 or 1       |
+
+**Examples:**
+
+Disable CORS errors
 
 ```shell
-sh enable_cors.sh
+sh enable_cors.sh 1
 ```
 
-### update_container.sh
+Enable CORS errors
+
+```shell
+sh enable_cors.sh 0
+```
+
+---
+
+### Update a Container Image
 
 - **Name:** update_container.sh
 - **Description:** Updates container image and tag of given pod.
-- **Params**: `pod` `tag`
+- **Read user input**: Yes
 
-Examples:
+**Syntax:**
+
+`update_container.sh $pod $tag`
+
+**Params:**
+
+| Name | Type/Options |
+| ---- | ------------ |
+| $pod | String       |
+| $tag | String       |
+
+**Examples:**
+
+It is possible to use another tag as long it exists on DockerHub.
 
 ```shell
-# It is possible to use another tag as long it exists on DockerHub
 sh update_container.sh web-ui DEVELOP
+```
+
+```shell
 sh update_container.sh projects DEVELOP
 ```
 
-### reinstall_reset.sh
+---
+
+### Reinstall the Platform
 
 - **Name:** reinstall_reset.sh
 - **Description:** Reinstalls the PlatIAgro platform resetting all configs and deleting existing data.
-- **Params**: `installation_mode` (platiagro, platiagro-auth, platiagro-gpu, platiagro-gpu-auth)
-- **Warning**: It clones the `platiagro/manifests` repository from GitHub with git in the current working directory.
+- **Read user input**: Yes
+
+> **WARNING:** It clones the `platiagro/manifests`repository from GitHub in the current working directory. So it's recommended to copy this script to another folder before running.
+
+**Syntax:**
+
+`reinstall_reset.sh $installation_mode`
+
+**Params:**
+
+| Name               | Type/Options                                                 |
+| ------------------ | ------------------------------------------------------------ |
+| $installation_mode | platiagro, platiagro-auth, platiagro-gpu, platiagro-gpu-auth |
+
+**Examples:**
+
+Installation for **CPUs and WITHOUT login**
 
 ```shell
-# It's recommended to copy the script to another folder before running it
-cp reinstall_reset.sh ../..
-```
-
-Examples:
-
-```shell
-# Installation for CPUs and WITHOUT login
 sh reinstall_reset.sh platiagro
 ```
 
+Installation for **CPUs and WITH login**
+
 ```shell
-# Installation for CPUs and WITH login
 sh reinstall_reset.sh platiagro-auth
 ```
 
+Installation for **GPUs and WITHOUT login**
+
 ```shell
-# Installation for GPUs and WITHOUT login
 sh reinstall_reset.sh platiagro-gpu
 ```
 
+Installation for **GPUs and WITH login**
+
 ```shell
-# Installation for GPUs and WITH login
 sh reinstall_reset.sh platiagro-gpu-auth
 ```
 
-### reinstall_soft.sh
+---
 
-- **Name:** reinstall_soft.sh
-- **Description:** Pulls several images from the platiagro DockerHub and updates all corresponding kubernetes pods.
+### Minio Port Forward
 
-Examples:
+- **Name:** minio_port_forward.sh
+- **Description:** Forward the minio port.
+- **Read user input**: No
+
+**Examples:**
 
 ```shell
-sh reinstall_soft.sh
+sh minio_port_forward.sh
 ```
+
+---
+
+### Mysql Port Forward
+
+- **Name:** mysql_port_forward.sh
+- **Description:** Forward the MySQL port.
+- **Read user input**: No
+
+**Examples:**
+
+```shell
+sh mysql_port_forward.sh
+```
+
+---
+
+### Update Default Tasks
+
+- **Name:** update_tasks.sh
+- **Description:** Update the default tasks of the platform.
+- **Read user input**: No
+
+**Examples:**
+
+```shell
+sh update_tasks.sh
+```
+
+---
 
 ## Contribution
 
