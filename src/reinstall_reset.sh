@@ -1,9 +1,13 @@
 #!/bin/bash
 
-read -p "Installation mode (platiagro, platiagro-auth, platiagro-gpu, platiagro-gpu-auth): " installation_mode
+installation_mode="$1"
 
 if [ "$installation_mode" = "" ]; then
-    echo 'missing $installation_mode'
+    read -p "Installation mode (platiagro, platiagro-auth, platiagro-gpu, platiagro-gpu-auth): " installation_mode
+fi
+
+if [ "$installation_mode" = "" ]; then
+    echo 'Missing $installation_mode'
     exit 0
 elif [ "$installation_mode" != "platiagro" -a "$installation_mode" != "platiagro-auth" -a "$installation_mode" != "platiagro-gpu" -a "$installation_mode" != "platiagro-gpu-auth" ]; then
     echo 'This installation mode does not exist'
