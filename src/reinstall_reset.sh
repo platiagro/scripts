@@ -1,29 +1,22 @@
 #!/bin/bash
 
-if [ "$1" = "reset" ]; then
-    sudo kubeadm reset -f
-    rm -rf $HOME/.kube
-    for i in `seq 0 200`; do sudo rm -rf /l/disk0/disk-$i/* /mnt/disks/disk-$i/*; done
+installation_mode="$1"
+
+if [ "$installation_mode" = "" ]; then
+    read -p "Installation mode (platiagro, platiagro-auth, platiagro-gpu, platiagro-gpu-auth): " installation_mode
 fi
 
-if [ "$1" = "soft" ]; then
-   VERSION=0.3.0
-   sudo docker pull platiagro/dex-auth:$VERSION-SNAPSHOT
-   sudo docker pull platiagro/datasets:$VERSION-SNAPSHOT
-   sudo docker pull platiagro/projects:DEVELOP
-   sudo docker pull platiagro/persistence-agent:$VERSION-SNAPSHOT
-   sudo docker pull platiagro/web-ui:DEVELOP
-   sudo docker pull platiagro/platiagro-notebook-image:$VERSION
-   sudo docker pull platiagro/platiagro-experiment-image:$VERSION
-   sudo docker pull platiagro/platiagro-deployment-image:$VERSION
-   sudo docker pull platiagro/platiagro-monitoring-image:$VERSION
-   kubectl -n platiagro delete pod -l app=datasets
-   kubectl -n platiagro delete pod -l app=projects
-   kubectl -n platiagro delete pod -l app=persistence-agent
-   kubectl -n platiagro delete pod -l app=web-ui
-   kubectl -n anonymous delete pod server-0
-   exit 0
+if [ "$installation_mode" = "" ]; then
+    echo 'Missing $installation_mode'
+    exit 0
+elif [ "$installation_mode" != "platiagro" -a "$installation_mode" != "platiagro-auth" -a "$installation_mode" != "platiagro-gpu" -a "$installation_mode" != "platiagro-gpu-auth" ]; then
+    echo 'This installation mode does not exist'
+    exit 0
 fi
+
+sudo kubeadm reset -f
+rm -rf $HOME/.kube
+for i in `seq 0 200`; do sudo rm -rf /l/disk0/disk-$i/* /mnt/disks/disk-$i/*; done
 
 export KUBEFLOW_MASTER_IP_ADDRESS=$(ifconfig|grep -Po 10.1.0.[0-9]+|head -n 1)
 
@@ -219,9 +212,8 @@ EOF
 
 rm -rf manifests
 git clone --single-branch --branch v0.3.0-kubeflow-v1.3-branch https://github.com/platiagro/manifests.git
-cd manifests && while ! kustomize build platiagro-auth | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 10; done
+cd manifests && while ! kustomize build $installation_mode | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 10; done
 
 kubectl label namespace anonymous knative-eventing-injection=enabled
 
 kubectl -n platiagro wait --for=condition=complete --timeout=600s job/init-tasks
-
